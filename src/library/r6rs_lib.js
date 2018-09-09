@@ -331,12 +331,15 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
   //
   //        11.5  Equivalence predicates
   //
+  /** Check to see if the two objects are the same.*/
   define_libfunc("eqv?", 2, 2, function(ar){
     return BiwaScheme.eqv(ar[0], ar[1]);
   })
+  /** Check to see if the two objects are the same.*/
   define_libfunc("eq?", 2, 2, function(ar){
     return BiwaScheme.eq(ar[0], ar[1]);
   })
+  /** Check to see if the two objects are equivalent, including if lists and vectors have the same contents.*/
   define_libfunc("equal?", 2, 2, function(ar){
     return BiwaScheme.equal(ar[0], ar[1]);
   })
@@ -345,6 +348,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
   //        11.6  Procedure predicate
   //
   //"procedure?", 1, 1
+  /** #t if the object is a procedure.*/
   define_libfunc("procedure?", 1, 1, function(ar){
     return ((ar[0] instanceof Array) && (ar[0].closure_p === true)
 	    || (typeof ar[0] == "function"));
@@ -366,18 +370,22 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
   //
 
   //                11.7.4.1  Numerical type predicates
+  /** #t if object is a number.*/
   define_libfunc("number?", 1, 1, function(ar){
     return BiwaScheme.isNumber(ar[0]);
   });
+  /** #t if object is a complex number.*.
   define_libfunc("complex?", 1, 1, function(ar){
     return BiwaScheme.isComplex(ar[0]);
   });
+  /** #t if object is a real number.*/
   define_libfunc("real?", 1, 1, function(ar){
     return BiwaScheme.isReal(ar[0]);
   });
   define_libfunc("rational?", 1, 1, function(ar){
     return BiwaScheme.isRational(ar[0]);
   });
+  /** #t if object is an integer.*/
   define_libfunc("integer?", 1, 1, function(ar){
     return BiwaScheme.isInteger(ar[0]);
   });
@@ -397,6 +405,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
   //                11.7.4.3  Arithmetic operations
 
   //inf & nan: ok (for this section)
+  /** #t if the two numbers are both the same.*/
   define_libfunc("=", 2, null, function(ar){
     var v = ar[0];
     assert_number(ar[0]);
@@ -407,6 +416,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     }
     return true;
   });
+  /** #t if the first number is less than the second number.*./
   define_libfunc("<", 2, null, function(ar){
     assert_number(ar[0]);
     for(var i=1; i<ar.length; i++){
@@ -415,6 +425,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     }
     return true;
   });
+  /** #t if the first number is larger than the second number.*/
   define_libfunc(">", 2, null, function(ar){
     assert_number(ar[0]);
     for(var i=1; i<ar.length; i++){
@@ -423,6 +434,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     }
     return true;
   });
+  /** #t if the first number is less than or equal to the second number.*/
   define_libfunc("<=", 2, null, function(ar){
     assert_number(ar[0]);
     for(var i=1; i<ar.length; i++){
@@ -431,6 +443,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     }
     return true;
   });
+  /** #t if the first number is greater than or equal to the second number.*/
   define_libfunc(">=", 2, null, function(ar){
     assert_number(ar[0]);
     for(var i=1; i<ar.length; i++){
@@ -440,44 +453,54 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     return true;
   });
 
+	/** #t if the number is 0.*/
   define_libfunc("zero?", 1, 1, function(ar){
     assert_number(ar[0]);
     return ar[0] === 0;
   });
+  /** #t if the number is greater than 0.*/
   define_libfunc("positive?", 1, 1, function(ar){
     assert_number(ar[0]);
     return (ar[0] > 0);
   });
+  /** #t if the number is less than 0.*/
   define_libfunc("negative?", 1, 1, function(ar){
     assert_number(ar[0]);
     return (ar[0] < 0);
   });
+  /** #t if the number is odd.*/
   define_libfunc("odd?", 1, 1, function(ar){
     assert_number(ar[0]);
     return (ar[0] % 2 == 1) || (ar[0] % 2 == -1);
   })
+  /** #t if the number is even.*/
   define_libfunc("even?", 1, 1, function(ar){
     assert_number(ar[0]);
     return ar[0] % 2 == 0;
   })
+  /** #t if the number is not positive or negative infinity.*/
   define_libfunc("finite?", 1, 1, function(ar){
     assert_number(ar[0]);
     return (ar[0] != Infinity) && (ar[0] != -Infinity) && !isNaN(ar[0]);
   })
+  /** #t if the number is positive or negative infinity.*/
   define_libfunc("infinite?", 1, 1, function(ar){
     assert_number(ar[0]);
     return (ar[0] == Infinity) || (ar[0] == -Infinity);
   })
+  /** #t if the number is NaN (not a number).*/
   define_libfunc("nan?", 1, 1, function(ar){
     assert_number(ar[0]);
     return isNaN(ar[0]);
   })
+  /** Returns the larger of the two numbers.*/
   define_libfunc("max", 2, null, function(ar){
     for(var i=0; i<ar.length; i++)
       assert_number(ar[i]);
 
     return Math.max.apply(null, ar)
   });
+  /** Returns the smaller of the two numbers.*/
   define_libfunc("min", 2, null, function(ar){
     for(var i=0; i<ar.length; i++)
       assert_number(ar[i]);
@@ -493,6 +516,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
       if(angle === 0) return magnitude;
       return Complex.from_polar(magnitude, angle);
   }
+  /** The sum of the provided numbers.*/
   define_libfunc("+", 0,null, function(ar){
     var real = 0;
     var imag = 0;
@@ -511,6 +535,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
       if(n instanceof Complex) return n.angle();
       return 0;
   }
+  /** Multiplies the provided numbers.*/
   define_libfunc("*", 0,null, function(ar){
     var magnitude = 1;
     var angle = 0;
@@ -521,6 +546,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     }
     return polar_or_real(magnitude, angle);
   });
+  /** Subtracts the numbers from the first provided number.*/
   define_libfunc("-", 1,null, function(ar){
     var len = ar.length;
     assert_number(ar[0]);
@@ -541,6 +567,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     }
   });
   //for r6rs specification, (/ 0 0) or (/ 3 0) raises '&assertion exception'
+  /** Divides the first number by the subsequent numbers. If only one number provided then divides 1 by the provided number.*/
   define_libfunc("/", 1,null, function(ar){
     var len = ar.length;
     assert_number(ar[0]);
@@ -561,6 +588,7 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     }
   });
 
+	/** If the provided number is negative then returns the positive version of the number.*/
   define_libfunc("abs", 1, 1, function(ar){
     assert_number(ar[0]);
     return Math.abs(ar[0]);
@@ -579,16 +607,19 @@ if( typeof(BiwaScheme)!='object' ) BiwaScheme={}; with(BiwaScheme) {
     return (n > 0) ? n - Math.floor(n / m) * m
                    : n - Math.ceil(n / m) * m;
   }
+  /** */
   define_libfunc("div0-and-mod0", 2, 2, function(ar){
     assert_number(ar[0]);
     assert_number(ar[1]);
     return new Values([div(ar[0], ar[1]), mod(ar[0], ar[1])]);
   })
+  /** */
   define_libfunc("div", 2, 2, function(ar){
     assert_number(ar[0]);
     assert_number(ar[1]);
     return div(ar[0], ar[1]);
   })
+  /** */
   define_libfunc("mod", 2, 2, function(ar){
     assert_number(ar[0]);
     assert_number(ar[1]);
